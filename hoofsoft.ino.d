@@ -1,0 +1,51 @@
+hoofsoft.ino.o: \
+ C:\Users\waerenbl\AppData\Local\Temp\buildda6ede22a3178470217c488fff9d5b2c.tmp\sketch\hoofsoft.ino.cpp \
+ C:\Program\ Files\ (x86)\Arduino\libraries\ArduinoJson\src/ArduinoJson.h \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson.h \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/DynamicJsonBuffer.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/BlockJsonBuffer.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\jsonbuffer.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Arduino/String.hpp \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/WString.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/avr_functions.h \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\JsonVariant.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonPrintable.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/DummyPrint.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\arduino\print.hpp \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Print.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/core_id.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/WString.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Printable.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/new.h \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/IndentedPrint.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonWriter.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/Encoding.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/ForceInline.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonFloat.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonInteger.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/Prettyfier.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/StaticStringBuilder.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/DynamicStringBuilder.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonVariantContent.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonVariantType.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/Unparsed.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\JsonVariantBase.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\JsonObjectKey.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\JsonVariant.ipp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonArray.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/JsonBufferAllocated.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/List.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/ListConstIterator.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/ListNode.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/ListIterator.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/Internals/ReferenceType.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonArray.ipp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonArraySubscript.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonSubscriptBase.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonObject.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonPair.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonObject.ipp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonObjectSubscript.hpp \
+ c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/StaticJsonBuffer.hpp \
+ C:\Users\waerenbl\AppData\Local\Temp\buildda6ede22a3178470217c488fff9d5b2c.tmp\sketch\HoofSerial.h \
+ C:\Users\waerenbl\AppData\Local\Temp\buildda6ede22a3178470217c488fff9d5b2c.tmp\sketch\Parameter.h
