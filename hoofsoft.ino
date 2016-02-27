@@ -8,7 +8,7 @@
 
 //Declare variables
 HoofSerial xbee;
-String hoofLocation;
+const char* hoofLocation;
 ADC *adc = new ADC();
 DataPacket dataPacket;
 
@@ -71,10 +71,9 @@ void setup()
 /**********************************************************************/
 void loop()
 {
-  noInterrupts();
-
+  
   if (xbee.dataAvailable())                           //Get command from the serial connection if available
-  {
+  {    
     String jsonString = xbee.readln();
 
     Serial.println(jsonString);
@@ -94,22 +93,22 @@ void loop()
       }      
     }
   }
-
-  if(dataAvailable)                               //Send new data over Xbee if available
+  
+  /*if(dataAvailable)                               //Send new data over Xbee if available
   {
     xbee.println(encodeJson(dataPacket));
     dataAvailable = false;
-  }
+  }*/
 
-  interrupts();
 }
 
 /**********************************************************************/
 void readAnalog()
-{  
+{ 
+  /* 
   //if(transmitRaw)
   {
-    dataPacket = { 1, hoofLocation, millis(), {0, 0, 0, 0} };
+    dataPacket = { 2, hoofLocation, millis(), {0, 0, 0, 0} };
     
     noInterrupts();  
     dataPacket.data[0] = adc->analogRead(sensorPin0);
@@ -119,7 +118,7 @@ void readAnalog()
     interrupts();
 
     dataAvailable = true;  
-  }
+  }*/
 }
 
 
@@ -166,7 +165,7 @@ void updateParameter(String key, String value)
   if(param.readKey() == "transmitRaw")
   {
     transmitRaw = param.readBlValue();
-    response = "True";
+    response = value;
     
     Serial.print("Parameter: ");
     Serial.print(key);
@@ -174,14 +173,14 @@ void updateParameter(String key, String value)
     Serial.println(transmitRaw);
   }
 
-  //sendResponse(key, response);
+  sendResponse(key, response);
 }
 
 
 /**********************************************************************/
 void sendResponse(String key, String response)
 {
-  ResponsePacket pcktResponse = { 2, hoofLocation, key, response };
+  ResponsePacket pcktResponse = { 1, "FL", key, response };
   String strResponse = encodeJson(pcktResponse);
   xbee.println(strResponse);
 }
@@ -214,7 +213,7 @@ String encodeJson(DataPacket dataPacket)
   JsonObject& root = jsonBuffer.createObject();
     
   root["type"] = dataPacket.type;
-  //root["hoof"] = (String) dataPacket.hoof;
+  root["hoof"] = dataPacket.hoof.c_str();
   root["time"] = dataPacket.timeStamp;
 
   JsonArray& data = root.createNestedArray("data");
@@ -233,17 +232,15 @@ String encodeJson(DataPacket dataPacket)
 
 
 /**********************************************************************/
-String encodeJson(ResponsePacket responsePacket)
+String encodeJson(const ResponsePacket& data)
 {
-  StaticJsonBuffer<100> jsonBuffer;  
-  
-  //Build object tree in memory
+  StaticJsonBuffer<JSON_OBJECT_SIZE(4)> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();
   
-  root["type"] = responsePacket.type;
-  root["hoof"] = responsePacket.hoof;
-  root["parameter"] = responsePacket.parameter;
-  root["value"] = responsePacket.value;
+  root["type"] = data.type;
+  root["hoof"] = data.hoof.c_str();
+  root["parameter"] = data.parameter.c_str();
+  root["value"] = data.value.c_str();
         
   //Generate the JSON string
   char buffer[256];

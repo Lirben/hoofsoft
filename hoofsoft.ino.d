@@ -1,5 +1,40 @@
 hoofsoft.ino.o: \
- C:\Users\waerenbl\AppData\Local\Temp\buildda6ede22a3178470217c488fff9d5b2c.tmp\sketch\hoofsoft.ino.cpp \
+ C:\Users\waerenbl\AppData\Local\Temp\build99b61489234c89efdc8e08ed5324bdf4.tmp\sketch\hoofsoft.ino.cpp \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\libraries\ADC/ADC.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\libraries\ADC/ADC_Module.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Arduino.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/WProgram.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/avr/pgmspace.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/avr/interrupt.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/avr_functions.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/wiring.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/binary.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/core_id.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/core_pins.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/kinetis.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/pins_arduino.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/HardwareSerial.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Stream.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Print.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/WString.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Printable.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/new.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/avr_emulation.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_serial.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_desc.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_seremu.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_keyboard.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/keylayouts.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_mouse.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_joystick.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_midi.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_rawhid.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_flightsim.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_mtp.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/usb_undef.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/elapsedMillis.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Arduino.h \
+ C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/IntervalTimer.h \
  C:\Program\ Files\ (x86)\Arduino\libraries\ArduinoJson\src/ArduinoJson.h \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson.h \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/DynamicJsonBuffer.hpp \
@@ -7,16 +42,11 @@ hoofsoft.ino.o: \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\jsonbuffer.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Arduino/String.hpp \
  C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/WString.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/avr_functions.h \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\JsonVariant.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonPrintable.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/DummyPrint.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\arduino\print.hpp \
  C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Print.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/core_id.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/WString.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/Printable.h \
- C:\Program\ Files\ (x86)\Arduino\hardware\teensy\avr\cores\teensy3/new.h \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/IndentedPrint.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/JsonWriter.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\arduinojson\Internals/Encoding.hpp \
@@ -47,5 +77,6 @@ hoofsoft.ino.o: \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonObject.ipp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/JsonObjectSubscript.hpp \
  c:\program\ files\ (x86)\arduino\libraries\arduinojson\include\ArduinoJson/StaticJsonBuffer.hpp \
- C:\Users\waerenbl\AppData\Local\Temp\buildda6ede22a3178470217c488fff9d5b2c.tmp\sketch\HoofSerial.h \
- C:\Users\waerenbl\AppData\Local\Temp\buildda6ede22a3178470217c488fff9d5b2c.tmp\sketch\Parameter.h
+ C:\Users\waerenbl\AppData\Local\Temp\build99b61489234c89efdc8e08ed5324bdf4.tmp\sketch\HoofSerial.h \
+ C:\Users\waerenbl\AppData\Local\Temp\build99b61489234c89efdc8e08ed5324bdf4.tmp\sketch\Parameter.h \
+ C:\Users\waerenbl\AppData\Local\Temp\build99b61489234c89efdc8e08ed5324bdf4.tmp\sketch\hoofsoft.h
