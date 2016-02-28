@@ -1,15 +1,16 @@
-//Constants
+#ifndef TYPES_H
+#define TYPES_H
+
+//Define hoofs
 #define FRONT_LEFT  "FL"
 #define FRONT_RIGHT "FR"
 #define HIND_LEFT   "HL"
 #define HIND_RIGHT  "HR"
 
-//Define pins
-#define led 13
-#define sensorPin0 A0
-#define sensorPin1 A1
-#define sensorPin2 A2
-#define sensorPin3 A3
+//Define types of packages
+static const int COMMAND_PACKAGE_TYPE = 0;
+static const int ANSWER_PACKAGE_TYPE = 1;
+static const int DATA_PACKAGE_TYPE = 2;
 
 //Define Structs
 struct DataPacket
@@ -36,3 +37,4 @@ struct ResponsePacket
   String value;
 };
 
+#endif

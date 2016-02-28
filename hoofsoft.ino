@@ -1,16 +1,15 @@
 #include <ADC.h>
 #include <ArduinoJson.h>
 
-#include "HoofSerial.h"
+#include "Types.h"
 #include "Parameter.h"
-#include "hoofsoft.h"
-
+#include "HoofSerial.h"
 
 //Declare variables
 HoofSerial xbee;
+DataPacket dataPacket;
 const char* hoofLocation;
 ADC *adc = new ADC();
-DataPacket dataPacket;
 
 //Parameter variables
 volatile bool ledHigh;
@@ -20,6 +19,14 @@ volatile bool dataAvailable;
 //Declare timers
 IntervalTimer ledTimer;
 IntervalTimer analogTimer;
+
+//Define pins
+#define led 13
+#define sensorPin0 A0
+#define sensorPin1 A1
+#define sensorPin2 A2
+#define sensorPin3 A3
+
 
 /**********************************************************************/
 void initialise()
@@ -64,7 +71,6 @@ void setup()
   //Initialise the blinking led
   ledTimer.priority(128);
   ledTimer.begin(ledBlink, 500000);
-
 }
 
 
@@ -72,15 +78,11 @@ void setup()
 void loop()
 {
   
-  if (xbee.dataAvailable())                           //Get command from the serial connection if available
-  {    
-    String jsonString = xbee.readln();
-
-    Serial.println(jsonString);
-       
-    CommandPacket cmdPacket = decodeJson(jsonString);
+  if (xbee.dataAvailable())
+  {          
+    CommandPacket cmdPacket = xbee.readPacket();
     
-    if((cmdPacket.type) == 0)
+    if((cmdPacket.type) == COMMAND_PACKAGE_TYPE)
     {
       if(cmdPacket.command == "read")
       {
@@ -94,21 +96,20 @@ void loop()
     }
   }
   
-  /*if(dataAvailable)                               //Send new data over Xbee if available
+  if(dataAvailable)                               //Send new data over Xbee if available
   {
-    xbee.println(encodeJson(dataPacket));
+    xbee.sendData(dataPacket);
     dataAvailable = false;
-  }*/
-
+  }
 }
+
 
 /**********************************************************************/
 void readAnalog()
-{ 
-  /* 
-  //if(transmitRaw)
+{  
+  if(transmitRaw)
   {
-    dataPacket = { 2, hoofLocation, millis(), {0, 0, 0, 0} };
+    dataPacket = { DATA_PACKAGE_TYPE, hoofLocation, millis(), {0, 0, 0, 0} };
     
     noInterrupts();  
     dataPacket.data[0] = adc->analogRead(sensorPin0);
@@ -118,7 +119,7 @@ void readAnalog()
     interrupts();
 
     dataAvailable = true;  
-  }*/
+  }
 }
 
 
@@ -140,9 +141,9 @@ void readParameter(String key)
 {  
   String response = "NaN";
 
-  if(key == "location")
+  if(key == "status")
   {
-    response = hoofLocation;
+    response = "online";
   }
   
   if(key == "transmitRaw")
@@ -150,7 +151,7 @@ void readParameter(String key)
     response = (String) transmitRaw;
   }
 
-  //sendResponse(key, response);
+  sendResponse(key, response);
 }
 
 
@@ -180,71 +181,6 @@ void updateParameter(String key, String value)
 /**********************************************************************/
 void sendResponse(String key, String response)
 {
-  ResponsePacket pcktResponse = { 1, "FL", key, response };
-  String strResponse = encodeJson(pcktResponse);
-  xbee.println(strResponse);
-}
-
-
-/**********************************************************************/
-CommandPacket decodeJson(String jsonString)
-{ 
-  char jsonChar[200];
-  StaticJsonBuffer<200> jsonBuffer;
-  
-  jsonString.toCharArray(jsonChar, jsonString.length() + 1);
-  JsonObject& root = jsonBuffer.parseObject(jsonChar);
-
-  if (!root.success()) {
-    Serial.println("parseObject() failed");
-    return (CommandPacket) { 0, "null", "null" };
-  }
-
-  return (CommandPacket) { root["type"], root["command"], root["parameter"], root["value"] };
-}
-
-
-/**********************************************************************/
-String encodeJson(DataPacket dataPacket)
-{
-  StaticJsonBuffer<200> jsonBuffer;  
-  
-  //Build object tree in memory
-  JsonObject& root = jsonBuffer.createObject();
-    
-  root["type"] = dataPacket.type;
-  root["hoof"] = dataPacket.hoof.c_str();
-  root["time"] = dataPacket.timeStamp;
-
-  JsonArray& data = root.createNestedArray("data");
-      
-  for(unsigned int i = 0; i < (sizeof(dataPacket.data) / sizeof(int)); i++)
-  {
-    data.add(dataPacket.data[i]);    
-  }
-    
-  //Generate the JSON string
-  char buffer[256];
-  root.printTo(buffer, sizeof(buffer));
-   
-  return String(buffer);
-}
-
-
-/**********************************************************************/
-String encodeJson(const ResponsePacket& data)
-{
-  StaticJsonBuffer<JSON_OBJECT_SIZE(4)> jsonBuffer;
-  JsonObject& root = jsonBuffer.createObject();
-  
-  root["type"] = data.type;
-  root["hoof"] = data.hoof.c_str();
-  root["parameter"] = data.parameter.c_str();
-  root["value"] = data.value.c_str();
-        
-  //Generate the JSON string
-  char buffer[256];
-  root.printTo(buffer, sizeof(buffer));
-   
-  return String(buffer);  
+  ResponsePacket pcktResponse = { ANSWER_PACKAGE_TYPE, "FL", key, response };
+  xbee.sendResponse(pcktResponse);
 }

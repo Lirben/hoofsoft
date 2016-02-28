@@ -1,3 +1,6 @@
+#ifndef PARAMETER_H
+#define PARAMETER_H
+
 class Parameter
 {
   public:
@@ -13,3 +16,5 @@ class Parameter
     bool _blValue;
     String _strValue;
 };
+
+#endif

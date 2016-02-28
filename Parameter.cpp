@@ -1,6 +1,3 @@
-#ifndef HoofSerial_h
-#define HoofSerial_h
-
 #include "Arduino.h"
 #include "Parameter.h"
 
@@ -38,5 +35,3 @@ String Parameter::readStrValue() {
 String Parameter::readKey() {
   return _key;
 }
-
-#endif
