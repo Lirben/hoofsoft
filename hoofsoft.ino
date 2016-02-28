@@ -31,7 +31,7 @@ IntervalTimer analogTimer;
 /**********************************************************************/
 void initialise()
 {
-  hoofLocation = FRONT_LEFT;
+  hoofLocation = FRONT_RIGHT;
   transmitRaw = false;
   dataAvailable = false;
 }
@@ -181,6 +181,6 @@ void updateParameter(String key, String value)
 /**********************************************************************/
 void sendResponse(String key, String response)
 {
-  ResponsePacket pcktResponse = { ANSWER_PACKAGE_TYPE, "FL", key, response };
+  ResponsePacket pcktResponse = { ANSWER_PACKAGE_TYPE, hoofLocation, key, response };
   xbee.sendResponse(pcktResponse);
 }
