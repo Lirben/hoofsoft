@@ -65,6 +65,7 @@ void HoofSerial::sendData(const DataPacket& dataPacket)
   for(unsigned int i = 0; i < DATA_ARRAY_SIZE; i++)
   {
     JsonObject& test = dataObj.createNestedObject();
+    test["t"] = dataPacket.data[i].timeStamp; 
      
     JsonArray& obj = test.createNestedArray("f");   
 
