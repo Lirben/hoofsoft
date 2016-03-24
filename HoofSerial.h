@@ -1,6 +1,7 @@
 #ifndef HOOFSERIAL_H
 #define HOOFSERIAL_H
 
+#include <XBee.h>
 #include "Types.h"
 
 class HoofSerial
@@ -12,11 +13,10 @@ class HoofSerial
     CommandPacket readPacket();
     void sendData(const DataPacket& dataPacket);
     void sendResponse(const ResponsePacket& responsePacket);
-    void println(String payload);
+    void println(String payload, bool disableAck);
 
   private:
-    Stream* _serial;
-    String _serialInput;
+    XBee _xbee = XBee();   
     CommandPacket decodeJson(String jsonString);    
 };
 

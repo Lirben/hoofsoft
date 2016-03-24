@@ -8,13 +8,14 @@
 //Declare variables
 HoofSerial xbee;
 DataPacket dataPacket;
-const char* hoofLocation;
+int hoofLocation;
 ADC *adc = new ADC();
 
 //Parameter variables
 volatile bool ledHigh;
 volatile bool transmitRaw;
 volatile bool dataAvailable;
+volatile int dataBufferId;
 
 //Declare timers
 IntervalTimer ledTimer;
@@ -34,6 +35,7 @@ void initialise()
   hoofLocation = FRONT_RIGHT;
   transmitRaw = false;
   dataAvailable = false;
+  dataBufferId = 0;
 }
 
 
@@ -79,11 +81,11 @@ void loop()
 {
   
   if (xbee.dataAvailable())
-  {          
+  {    
     CommandPacket cmdPacket = xbee.readPacket();
-    
+
     if((cmdPacket.type) == COMMAND_PACKAGE_TYPE)
-    {
+    {              
       if(cmdPacket.command == "read")
       {
         readParameter(cmdPacket.parameter);
@@ -108,17 +110,32 @@ void loop()
 void readAnalog()
 {  
   if(transmitRaw)
-  {
-    dataPacket = { DATA_PACKAGE_TYPE, hoofLocation, millis(), {0, 0, 0, 0} };
+  {  
+    DataContent dataContent = { 0, {0, 0, 0, 0} };
+
+    dataContent.timeStamp = millis();
     
-    noInterrupts();  
-    dataPacket.data[0] = adc->analogRead(sensorPin0);
-    dataPacket.data[1] = adc->analogRead(sensorPin1);
-    dataPacket.data[2] = adc->analogRead(sensorPin2);
-    dataPacket.data[3] = adc->analogRead(sensorPin3);
+    if(dataBufferId == 0)
+    {
+      dataPacket = { DATA_PACKAGE_TYPE, hoofLocation, {dataContent, dataContent, dataContent, dataContent, dataContent} };
+    }
+    
+    noInterrupts();
+    dataContent.data[0] = adc->analogRead(sensorPin0);
+    dataContent.data[1] = adc->analogRead(sensorPin1);
+    dataContent.data[2] = adc->analogRead(sensorPin2);
+    dataContent.data[3] = adc->analogRead(sensorPin3);
     interrupts();
 
-    dataAvailable = true;  
+    dataPacket.data[dataBufferId] = dataContent;
+
+    if(dataBufferId == DATA_ARRAY_SIZE - 1)
+    {
+      dataAvailable = true;
+      dataBufferId = -1;
+    }
+
+    dataBufferId++;
   }
 }
 

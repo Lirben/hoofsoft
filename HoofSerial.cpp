@@ -8,64 +8,45 @@
 /**********************************************************************/
 void HoofSerial::setSerial(Stream &serial)
 {
-  _serial = &serial;
-  _serialInput.reserve(200);
+  _xbee.setSerial(serial);
 }
 
 /**********************************************************************/
 bool HoofSerial::dataAvailable()
 {
-  return _serial->available();
-}
-
-/**********************************************************************/
-String HoofSerial::readln()
-{
-  bool stringComplete = false;
-  
-  _serialInput = "";
-  
-  while (!stringComplete) {
-    
-    //Wait for the next byte to arrive
-    while(!_serial->available())
-    { }
-
-    char inChar = (char) _serial->read();                // Get the new byte
-    
-    if (inChar != '\r' && inChar != '\n')
-    {      
-      _serialInput += inChar;
-    }
-    
-    if (inChar == '\n')
-    {
-      stringComplete = true;
-    } 
-  }
-
-  return _serialInput;
+  _xbee.readPacket();
+  return _xbee.getResponse().isAvailable();
 }
 
 /**********************************************************************/
 CommandPacket HoofSerial::readPacket()
 {
-  CommandPacket cmdPacket = { COMMAND_PACKAGE_TYPE, "null", "null", "null"};
+  String jsonString = "";
+  Rx16Response rx16 = Rx16Response();
+  CommandPacket cmdPacket = { COMMAND_PACKAGE_TYPE, -1, "null", "null", "null"};
+
+  if (_xbee.getResponse().getApiId() == RX_16_RESPONSE)
+  {
+    _xbee.getResponse().getRx16Response(rx16);
+
+    for(int i = 0; i < rx16.getDataLength(); i++)
+    {
+      char test = rx16.getData(i);
+      jsonString += test;
+    }
+    
+    cmdPacket = decodeJson(jsonString);
   
-  if(this->dataAvailable())
-  { 
-    String jsonString = this->readln();
-    cmdPacket = decodeJson(jsonString);    
+    Serial.print(cmdPacket.type);
+    Serial.print(" ");
+    Serial.print(cmdPacket.hoofLocation);
+    Serial.print(" ");
+    Serial.print(cmdPacket.command);
+    Serial.print(" ");
+    Serial.print(cmdPacket.parameter);
+    Serial.print(" ");
+    Serial.println(cmdPacket.value);
   }
-
-  Serial.print(cmdPacket.type);
-  Serial.print(" ");
-  Serial.print(cmdPacket.command);
-  Serial.print(" ");
-  Serial.print(cmdPacket.parameter);
-  Serial.print(" ");
-  Serial.println(cmdPacket.value);
-
   return cmdPacket;  
 }
 
@@ -73,23 +54,29 @@ CommandPacket HoofSerial::readPacket()
 void HoofSerial::sendData(const DataPacket& dataPacket)
 {
   String output;
-  const int BUFFER_SIZE = JSON_OBJECT_SIZE(4) + JSON_ARRAY_SIZE(4);
+  const int BUFFER_SIZE = JSON_OBJECT_SIZE(1) + (JSON_ARRAY_SIZE(DATA_ARRAY_SIZE) * (JSON_OBJECT_SIZE(1) + JSON_ARRAY_SIZE(4)));
+  
   StaticJsonBuffer<BUFFER_SIZE> jsonBuffer;
   JsonObject& root = jsonBuffer.createObject();       //Build object tree in memory
-    
+  
   root["type"] = dataPacket.type;
-  root["hoof"] = dataPacket.hoof.c_str();
-  root["time"] = dataPacket.timeStamp;
+  JsonArray& dataObj = root.createNestedArray("sample");
 
-  JsonArray& data = root.createNestedArray("data");
-      
-  for(unsigned int i = 0; i < (sizeof(dataPacket.data) / sizeof(int)); i++)
+  for(unsigned int i = 0; i < DATA_ARRAY_SIZE; i++)
   {
-    data.add(dataPacket.data[i]);    
+    JsonObject& test = dataObj.createNestedObject();
+     
+    JsonArray& obj = test.createNestedArray("f");   
+
+    for(unsigned int j = 0; j < 4; j++)
+    {
+      obj.add(dataPacket.data[i].data[j]);
+    }    
   }
   
   root.printTo(output);       //Generate the JSON string  
-  this->println(output);      //Send over the Serial medium 
+  
+  this->println(output, true);      //Send over the Serial medium
 }
 
 /**********************************************************************/
@@ -100,33 +87,49 @@ void HoofSerial::sendResponse(const ResponsePacket& responsePacket)
   JsonObject& root = jsonBuffer.createObject();       //Build object tree in memory
   
   root["type"] = responsePacket.type;
-  root["hoof"] = responsePacket.hoof.c_str();
+  root["hoof"] = responsePacket.hoofLocation;
   root["parameter"] = responsePacket.parameter.c_str();
   root["value"] = responsePacket.value.c_str();
   
-  root.printTo(output);       //Generate the JSON string  
-  this->println(output);      //Send over the Serial medium 
+  root.printTo(output);               //Generate the JSON string  
+  this->println(output, false);      //Send over the Serial medium 
 }
 
 /**********************************************************************/
-void HoofSerial::println(String payload)
-{
-  _serial->println(payload);
+void HoofSerial::println(String jsonString, bool disableAck = false)
+{ 
+  char jsonChar[jsonString.length() + 1];  
+  jsonString.toCharArray(jsonChar, sizeof(jsonChar));  
+
+  Serial.println(jsonChar);
+
+  Tx16Request tx;
+  
+  if(!disableAck)
+  {
+    tx = Tx16Request(0x0005, (unsigned char*) jsonChar, sizeof(jsonChar));
+  }
+  else
+  {
+    tx = Tx16Request(0x0005, 0x0001, (unsigned char*) jsonChar, sizeof(jsonChar), 0x0000);
+  }   
+
+  _xbee.send(tx);
 }
 
 /**********************************************************************/
 CommandPacket HoofSerial::decodeJson(String jsonString)
-{  
+{    
   char jsonChar[jsonString.length() + 1];    
   jsonString.toCharArray(jsonChar, sizeof(jsonChar));         //Convert to char array
 
   StaticJsonBuffer<200> jsonBuffer; 
-  JsonObject& root = jsonBuffer.parseObject(jsonChar); 
+  JsonObject& root = jsonBuffer.parseObject(jsonChar);
 
   if (root.success())
   {
-    return (CommandPacket) { root["type"], root["command"], root["parameter"], root["value"] };
+    return (CommandPacket) { root["type"], root["hoof"], root["command"], root["parameter"], root["value"] };
   }
 
-  return (CommandPacket) { 0, "null", "null", "null" };
+  return (CommandPacket) { 0, -1, "null", "null", "null" };
 }
