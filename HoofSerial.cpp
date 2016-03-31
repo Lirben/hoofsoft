@@ -23,7 +23,7 @@ CommandPacket HoofSerial::readPacket()
 {
   String jsonString = "";
   Rx16Response rx16 = Rx16Response();
-  CommandPacket cmdPacket = { COMMAND_PACKAGE_TYPE, -1, "null", "null", "null"};
+  CommandPacket cmdPacket = { COMMAND_PACKAGE_TYPE, "null", "null", "null"};
 
   if (_xbee.getResponse().getApiId() == RX_16_RESPONSE)
   {
@@ -38,8 +38,6 @@ CommandPacket HoofSerial::readPacket()
     cmdPacket = decodeJson(jsonString);
   
     Serial.print(cmdPacket.type);
-    Serial.print(" ");
-    Serial.print(cmdPacket.hoofLocation);
     Serial.print(" ");
     Serial.print(cmdPacket.command);
     Serial.print(" ");
@@ -88,7 +86,6 @@ void HoofSerial::sendResponse(const ResponsePacket& responsePacket)
   JsonObject& root = jsonBuffer.createObject();       //Build object tree in memory
   
   root["type"] = responsePacket.type;
-  root["hoof"] = responsePacket.hoofLocation;
   root["parameter"] = responsePacket.parameter.c_str();
   root["value"] = responsePacket.value.c_str();
   
@@ -102,7 +99,7 @@ void HoofSerial::println(String jsonString, bool disableAck = false)
   char jsonChar[jsonString.length() + 1];  
   jsonString.toCharArray(jsonChar, sizeof(jsonChar));  
 
-  Serial.println(jsonChar);
+  //Serial.println(jsonChar);
 
   Tx16Request tx;
   
@@ -129,8 +126,8 @@ CommandPacket HoofSerial::decodeJson(String jsonString)
 
   if (root.success())
   {
-    return (CommandPacket) { root["type"], root["hoof"], root["command"], root["parameter"], root["value"] };
+    return (CommandPacket) { root["type"], root["command"], root["parameter"], root["value"] };
   }
 
-  return (CommandPacket) { 0, -1, "null", "null", "null" };
+  return (CommandPacket) { 0, "null", "null", "null" };
 }

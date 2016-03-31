@@ -25,14 +25,12 @@ struct DataContent
 struct DataPacket
 {
   int type;
-  int hoofLocation;
   DataContent data[5];
 };
 
 struct CommandPacket
 {
   int type;
-  int hoofLocation;
   String command;
   String parameter;
   String value;
@@ -41,7 +39,6 @@ struct CommandPacket
 struct ResponsePacket
 {
   int type;
-  int hoofLocation;
   String parameter;
   String value;
 };

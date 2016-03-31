@@ -15,6 +15,8 @@ ADC *adc = new ADC();
 volatile bool ledHigh;
 volatile bool transmitRaw;
 volatile bool dataAvailable;
+volatile unsigned int prevTime;
+volatile unsigned int timeBase;
 volatile int dataBufferId;
 
 //Declare timers
@@ -23,6 +25,7 @@ IntervalTimer analogTimer;
 
 //Define pins
 #define led 13
+#define sideSwitch 23
 #define sensorPin0 A0
 #define sensorPin1 A1
 #define sensorPin2 A2
@@ -32,10 +35,11 @@ IntervalTimer analogTimer;
 /**********************************************************************/
 void initialise()
 {
-  hoofLocation = FRONT_RIGHT;
   transmitRaw = false;
   dataAvailable = false;
   dataBufferId = 0;
+  timeBase = 0;
+  prevTime = 0;
 }
 
 
@@ -62,11 +66,25 @@ void setup_serial()
 
 
 /**********************************************************************/
+void detectLocation()
+{
+  pinMode(sideSwitch, INPUT);
+  
+  hoofLocation = FRONT_LEFT;
+
+  if(digitalRead(sideSwitch) == true)
+  {
+      hoofLocation = FRONT_RIGHT;
+  }
+}
+
+/**********************************************************************/
 void setup()
 {  
   delay(500);         //Startup delay
   
-  initialise();      //Initialise parameters & variables  
+  initialise();       //Initialise parameters & variables
+  detectLocation();   //Detect the location of the hoof
   setup_serial();     //Initialise the serial connections
   setup_adc();        //Initialise the analogue pins & timers
 
@@ -108,16 +126,25 @@ void loop()
 
 /**********************************************************************/
 void readAnalog()
-{  
-  if(transmitRaw)
-  {  
-    DataContent dataContent = { 0, {0, 0, 0, 0} };
+{
+  ///Calculate time base
+  unsigned int curTime = millis();
+  
+  noInterrupts();
+  timeBase += (curTime - prevTime);
+  prevTime = curTime;
+  interrupts();
 
-    dataContent.timeStamp = millis();
+  Serial.println(timeBase);
+
+  ///Measure & transmit if applicable
+  if(transmitRaw)
+  {    
+    DataContent dataContent = { timeBase, {0, 0, 0, 0} };
     
     if(dataBufferId == 0)
     {
-      dataPacket = { DATA_PACKAGE_TYPE, hoofLocation, {dataContent, dataContent, dataContent, dataContent, dataContent} };
+      dataPacket = { DATA_PACKAGE_TYPE, {dataContent, dataContent, dataContent, dataContent, dataContent} };
     }
     
     noInterrupts();
@@ -158,14 +185,17 @@ void readParameter(String key)
 {  
   String response = "NaN";
 
-  if(key == "status")
+  if(key == "location")
   {
-    response = "online";
+    response = (String) hoofLocation;
   }
-  
-  if(key == "transmitRaw")
+  else if(key == "transmitRaw")
   {
     response = (String) transmitRaw;
+  }
+  else if(key == "timeBase")
+  {    
+    response = (String) timeBase;
   }
 
   sendResponse(key, response);
@@ -184,12 +214,20 @@ void updateParameter(String key, String value)
   {
     transmitRaw = param.readBlValue();
     response = value;
-    
-    Serial.print("Parameter: ");
-    Serial.print(key);
-    Serial.print(" changed to ");
-    Serial.println(transmitRaw);
   }
+  else if(param.readKey() == "timeBase")
+  {
+    noInterrupts();
+    timeBase = (unsigned int) value.toInt(); 
+    interrupts();
+    
+    response = String(timeBase);
+  }
+      
+  Serial.print("Parameter: ");
+  Serial.print(key);
+  Serial.print(" changed to ");
+  Serial.println(transmitRaw);  
 
   sendResponse(key, response);
 }
@@ -198,6 +236,6 @@ void updateParameter(String key, String value)
 /**********************************************************************/
 void sendResponse(String key, String response)
 {
-  ResponsePacket pcktResponse = { ANSWER_PACKAGE_TYPE, hoofLocation, key, response };
+  ResponsePacket pcktResponse = { ANSWER_PACKAGE_TYPE, key, response };
   xbee.sendResponse(pcktResponse);
 }
